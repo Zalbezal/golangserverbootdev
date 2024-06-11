@@ -44,6 +44,14 @@ func (db *DB) ensureDB() error {
 	return err
 }
 
+func (db *DB) ResetDB() error {
+	err := os.Remove(db.path)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	return db.ensureDB()
+}
+
 func (db *DB) loadDB() (DBStructure, error) {
 	db.mu.RLock()
 	defer db.mu.RUnlock()
@@ -75,25 +83,4 @@ func (db *DB) writeDB(dbStructure DBStructure) error {
 		return err
 	}
 	return nil
-}
-
-func (db *DB) loginUser(email, password string) (User, error) {
-	dbStructure, err := db.loadDB()
-	if err != nil {
-		return User{}, err
-	}
-
-	hashed_password, err := HashPassword(password)
-	if err != nil {
-		return User{}, err
-	}
-
-	for i := 0; i < len(dbStructure.Users)+1; i++ {
-		if dbStructure.Users[i].Email == email && dbStructure.Users[i].Password == hashed_password {
-
-		}
-	}
-
-	// return user, nil
-	return User{},nil
 }
