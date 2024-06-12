@@ -2,10 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"golangserverbootdev/internal/auth"
 	"net/http"
 	"strconv"
-
-	"golangserverbootdev/internal/auth"
 )
 
 func (cfg *apiConfig) handlerUsersUpdate(w http.ResponseWriter, r *http.Request) {
