@@ -62,11 +62,11 @@ func (db *DB) DeleteChirp(id int) error {
 		return err
 	}
 
-	chirp, ok := dbStructure.Chirps[id]
-	if !ok {
-		return ErrNotExist
+	delete(dbStructure.Chirps, id)
+	err = db.writeDB(dbStructure)
+	if err != nil {
+		return err
 	}
-	
-	delete(dbStructure.Chirps, chirp.ID)
+
 	return nil
 }
